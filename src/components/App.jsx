@@ -1,16 +1,29 @@
+import { useState } from 'react'
+import { Searchbar } from './SearchBar/SearchBar'
+import { ImageGallery } from './ImageGallery/ImageGallery'
+import { Modal, useModal } from './Modal/Modal'
+
+
 export const App = () => {
-  return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101'
-      }}
-    >
-      React homework template
-    </div>
-  );
-};
+    const [searchQuery, setSearchQuery] = useState('');
+    const { selectedImage, isModalOpen, openModal, closeModal } = useModal();
+
+    
+    const handleSearch = query => {
+        setSearchQuery(query);
+    };
+
+    return (
+        <div>
+            <Searchbar onSubmit={handleSearch} />
+            <ImageGallery searchQuery={searchQuery} onImageClick={openModal} />
+            {isModalOpen && (
+                <Modal
+                    largeImageURL={selectedImage.largeImageURL}
+                    tags={selectedImage.tags}
+                    onClick={closeModal}
+                />
+            )}
+        </div>
+    )
+}  
